@@ -1,8 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 import json
 import datetime
 from .models import Word
 import random
+from django.urls import reverse
 # functions
 def get_words():
     amount = 15
@@ -30,6 +31,13 @@ def get_words():
         words = Word.objects.filter(chosen=True).filter(date=datetime.date.today())
         for word in words:
             result.append(word)
+
+    # unchoose words older than 45 days
+    words = Word.objects.filter(date=datetime.date.today() - datetime.timedelta(45)).filter(chosen=True)
+    for word in words:
+        word.chosen=False
+        word.save()
+        
     return result
 
 def merge(data):
@@ -63,8 +71,13 @@ def mix(a,b,c):
 
 
 def index(request):
-    words,translation,sentences = merge(get_words())
-    words,translation,sentences = mix(words,translation,sentences)
-    data = json.dumps({"words":words,"translation":translation,"sentences":sentences})
-    return render(request,"LearnSomeWords/app.html",{"data":data})
+    if request.method == 'GET':
+        words,translation,sentences = merge(get_words())
+        words,translation,sentences = mix(words,translation,sentences)
+        data = json.dumps({"words":words,"translation":translation,"sentences":sentences})
+        return render(request,"LearnSomeWords/app.html",{"data":data})
+    else:
+        return redirect('success')
 
+def success(request):
+    return render(request,"LearnSomeWords/success.html")

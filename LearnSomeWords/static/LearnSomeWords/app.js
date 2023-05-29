@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
             text += '<br />'
         }
         document.querySelector('#sentence').innerHTML = text;
+        window.scrollTo(0, 0);
     }
 
     function translate() {
@@ -61,18 +62,11 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('#sentence').innerHTML = text;
 
     // translate button
-    document.querySelector('#translate').onclick = () => {
+    document.querySelector('#translate').onclick = (ev) => {
         translate();
+        ev.stopPropagation();
     };
     // next button
-    document.querySelector('#next').onclick = () => {
-        move(1);
-    };
-
-    // previous button
-    document.querySelector('#previous').onclick = () => {
-        move(-1);
-    };
     setInterval(function () {
         if (pos === words.length - 1) {
             document.querySelector('#finish').disabled = false;
@@ -92,11 +86,26 @@ document.addEventListener('DOMContentLoaded', function () {
             translate();
         }
     }
-    document.querySelector('#pronounce').onclick = () => {
+    document.querySelector('#pronounce').onclick = (ev) => {
         var audio = new Audio(`https://dict.youdao.com/dictvoice?audio=${words[pos]}&type=1`);
         audio.play();
+        ev.stopPropagation();
 
     }
+    document.addEventListener("click", (event) => {
+
+        if (event.target !== document.querySelectorAll('button')) {
+
+            let middlehalf = window.innerWidth / 2;
+            if (event.clientX > middlehalf) {
+                move(1);
+            } else {
+                move(-1);
+            }
+            console.log('clicked');
+        }
+
+    });
 
 
 })

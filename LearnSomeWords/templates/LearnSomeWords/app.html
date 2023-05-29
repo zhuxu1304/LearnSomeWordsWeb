@@ -17,7 +17,7 @@
 <body>
     <div id="data" style="display: none;"> {{ data }}</div>
     <div class="card text-center  text-bg-light">
-        <div class="card-header">Learn some words</div>
+        <div class="card-header" id="header">Learn some words</div>
         <div class="card-body">
             <p class=" card-text" style="min-height: 60px;font-size: 30px;" id="text">
                 content</p>
@@ -42,21 +42,14 @@
             </div>
             <div class=" card-footer" id="position">1/90</div>
         </div>
-        <div class="container text-center" style="margin-bottom: 10px;">
-            <div class="row align-items-end">
-                <div class="col-4">
-                    <button type="button" class="btn btn-primary btn-lg" id="previous">Previous</button>
-                </div>
-                <div class="col-4">
-                    <button type="button" class="btn btn-success btn-lg" id="translate">Translate</button>
-                </div>
-                <div class="col-4">
-                    <button type="button" class="btn btn-primary btn-lg" id="next">Next</button>
-                </div>
-            </div>
+
+        <div class="d-grid gap-2" style="margin-bottom: 10px;">
+            <button type="button" class="btn btn-primary btn-lg" id="translate">Translate</button>
+
         </div>
         <div class="d-grid gap-2">
-            <form>
+            <form action="{% url 'index'%}" method="post">
+                {% csrf_token %}
                 <input id="finish" class="btn btn-success" type="submit" value="Finish" style="width: 100%;">
             </form>
         </div>
